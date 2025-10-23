@@ -1,7 +1,7 @@
 "use client";
 
 import { useAccount, useBalance } from "wagmi";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
 
 const cUSD_ADDRESS = "0x765de816845861e75a25fca122bb6898b8b1282a";
 const USDC_ADDRESS = "0xcebA9300f2b948710d2653dD7B07f33A8B32118C";

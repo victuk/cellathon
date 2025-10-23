@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { UserBalance } from "@/components/user-balance";
+import { Button } from "components/ui/button";
+import { UserBalance } from "components/user-balance";
 import { Zap } from "lucide-react";
 
 export default function Home() {

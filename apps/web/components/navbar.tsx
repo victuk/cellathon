@@ -5,13 +5,13 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Menu, ExternalLink } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "components/ui/button"
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
-} from "@/components/ui/sheet"
-import { ConnectButton } from "@/components/connect-button"
+} from "components/ui/sheet"
+import { ConnectButton } from "components/connect-button"
 
 const navLinks = [
   { name: "Home", href: "/" },
