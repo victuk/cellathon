@@ -1,102 +1,201 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import Image from "next/image"
-import { usePathname } from "next/navigation"
-import { Menu, ExternalLink } from "lucide-react"
-
-import { Button } from "components/ui/button"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Zap, Brain, Trophy, ExternalLink } from "lucide-react";
+import { Button } from "components/ui/button";
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
-} from "components/ui/sheet"
-import { ConnectButton } from "components/connect-button"
+  SheetClose,
+} from "components/ui/sheet";
+import { ConnectButton } from "components/connect-button";
 
 const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "Docs", href: "https://docs.celo.org", external: true },
-]
+  { name: "Home", href: "/", icon: Zap },
+  // { name: "Play", href: "/play", icon: Brain },
+  // { name: "Tournaments", href: "/tournaments", icon: Trophy },
+  {
+    name: "Docs",
+    href: "https://docs.celo.org",
+    external: true,
+    icon: ExternalLink,
+  },
+];
 
 export function Navbar() {
-  const pathname = usePathname()
-  
+  const pathname = usePathname();
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-xl supports-backdrop-filter:bg-background/70 shadow-sm">
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between px-4">
+        {/* Left Section */}
         <div className="flex items-center gap-2">
-          {/* Mobile menu button */}
+          {/* Mobile Menu */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
+              <Button
+                variant="outline"
+                size="icon"
+                className="md:hidden border-2 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-200"
+              >
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-80">
-              <div className="flex items-center gap-2 mb-8">
 
-                <span className="font-bold text-lg">
-                  my-celo-app
-                </span>
-              </div>
-              <nav className="flex flex-col gap-4">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    target={link.external ? "_blank" : undefined}
-                    rel={link.external ? "noopener noreferrer" : undefined}
-                    className={`flex items-center gap-2 text-base font-medium transition-colors hover:text-primary ${
-                      pathname === link.href ? "text-foreground" : "text-foreground/70"
-                    }`}
-                  >
-                    {link.name}
-                    {link.external && <ExternalLink className="h-4 w-4" />}
-                  </Link>
-                ))}
-                <div className="mt-6 pt-6 border-t">
-                  <Button asChild className="w-full">
-                    <ConnectButton />
-                  </Button>
+            {/* Mobile Sheet Content */}
+            <SheetContent
+              side="left"
+              className="w-[85vw] max-w-sm p-0 bg-white/95"
+            >
+              <div className="flex items-center justify-between px-5 py-4 border-b">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
+                    <Brain className="h-6 w-6 text-primary-foreground" />
+                  </div>
+                  <div>
+                    <span className="font-bold text-lg">Quiz Arena</span>
+                    <p className="text-xs text-muted-foreground">
+                      Powered by Celo
+                    </p>
+                  </div>
                 </div>
+
+                <SheetClose asChild>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="rounded-full hover:bg-destructive/10 hover:text-destructive"
+                  >
+                    <X className="h-5 w-5" />
+                  </Button>
+                </SheetClose>
+              </div>
+
+              {/* Animated Nav Links */}
+              <nav className="flex flex-col gap-2 px-4 py-4">
+                <AnimatePresence>
+                  {navLinks.map((link, i) => {
+                    const Icon = link.icon;
+                    const isActive = pathname === link.href;
+
+                    return (
+                      <motion.div
+                        key={link.href}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                        transition={{ delay: i * 0.05 }}
+                      >
+                        <SheetClose asChild>
+                          <Link
+                            href={link.href}
+                            target={link.external ? "_blank" : undefined}
+                            rel={
+                              link.external ? "noopener noreferrer" : undefined
+                            }
+                            className={`flex items-center gap-4 px-4 py-3 text-base font-medium rounded-xl transition-all group ${
+                              isActive
+                                ? "bg-primary text-primary-foreground shadow-md shadow-primary/30"
+                                : "text-foreground/80 hover:bg-primary/10"
+                            }`}
+                          >
+                            <div
+                              className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${
+                                isActive
+                                  ? "bg-primary-foreground/20"
+                                  : "bg-muted/40 group-hover:bg-primary/20"
+                              }`}
+                            >
+                              <Icon
+                                className={`h-5 w-5 ${
+                                  isActive
+                                    ? "text-primary-foreground"
+                                    : "text-foreground group-hover:text-primary"
+                                }`}
+                              />
+                            </div>
+                            <span>{link.name}</span>
+                            {link.external && (
+                              <ExternalLink className="h-4 w-4 opacity-50" />
+                            )}
+                          </Link>
+                        </SheetClose>
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
               </nav>
+
+              {/* Mobile Connect Section */}
+              <div className="p-4 border-t">
+                <ConnectButton />
+              </div>
             </SheetContent>
           </Sheet>
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-
-            <span className="hidden font-bold text-xl sm:inline-block">
-              my-celo-app
-            </span>
+          <Link
+            href="/"
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity group"
+          >
+            <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <Brain className="h-5 w-5 text-primary" />
+            </div>
+            <div className="hidden sm:block">
+              <span className="font-bold text-lg leading-tight block">
+                Quiz Arena
+              </span>
+              <span className="text-[10px] text-muted-foreground leading-tight">
+                Celo Edition
+              </span>
+            </div>
           </Link>
         </div>
-        
-        {/* Desktop navigation */}
-        <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              target={link.external ? "_blank" : undefined}
-              rel={link.external ? "noopener noreferrer" : undefined}
-              className={`flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-primary ${
-                pathname === link.href
-                  ? "text-foreground"
-                  : "text-foreground/70"
-              }`}
-            >
-              {link.name}
-              {link.external && <ExternalLink className="h-4 w-4" />}
-            </Link>
-          ))}
-          
-          <div className="flex items-center gap-3">
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-1">
+          {navLinks.map((link) => {
+            const Icon = link.icon;
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noopener noreferrer" : undefined}
+                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all relative group ${
+                  isActive
+                    ? "text-primary bg-primary/10 font-semibold"
+                    : "text-foreground/70 hover:text-foreground hover:bg-muted"
+                }`}
+              >
+                <Icon
+                  className={`h-4 w-4 ${
+                    isActive
+                      ? "text-primary"
+                      : "opacity-60 group-hover:opacity-100"
+                  }`}
+                />
+                {link.name}
+                {isActive && (
+                  <motion.span
+                    layoutId="activeLink"
+                    className="absolute bottom-0 left-2 right-2 h-0.5 bg-primary rounded-full"
+                  />
+                )}
+              </Link>
+            );
+          })}
+
+          <div className="flex items-center gap-3 ml-4 pl-4 border-l border-border/50">
             <ConnectButton />
           </div>
         </nav>
       </div>
     </header>
-  )
+  );
 }
