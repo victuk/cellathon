@@ -103,8 +103,9 @@ export default function PracticePage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categories.map((category) => (
-              <div
+              <Link
                 key={category.id}
+                href={`/practice/${category.id}`}
                 className="group relative p-6 rounded-2xl border-2 border-border bg-background hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
               >
                 <div className="flex items-start justify-between mb-4">
@@ -127,7 +128,7 @@ export default function PracticePage() {
                   <Play className="mr-2 h-4 w-4" />
                   Start Practice
                 </Button>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
